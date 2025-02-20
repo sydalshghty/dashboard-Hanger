@@ -6,9 +6,10 @@ import { BrowserRouter } from 'react-router-dom';
 //import { HashRouter  } from 'react-router-dom';
 //import { TokenProvider } from './components/TokenContext';
 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <BrowserRouter basename='dashboardProject'>
+  <BrowserRouter>
       <App />
   </BrowserRouter>
 );
