@@ -1,28 +1,27 @@
 import UserName from "./userName";
 import SearchInput from "./searchInput";
 import AddNew from "./addNew";
-//import imgProduct from "../images/61GsnUB4HuL 2.png";
 import imgEdit from "../images/Group 409.svg";
 import imgDelete from "../images/Group 410.svg";
 import "../css/services.css";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { token } from "./token";
 import Loading from "./Loading";
 function Services() {
 
     const [services, setServices] = useState([]);
 
-    const fetchData = async () => {
+    const fetchData = useCallback(async () => {
         await fetch("https://united-hanger-2025.up.railway.app/api/services/get_all")
             .then((response) => response.json())
-            .then((data) => setServices(data.services));
-    }
+            .then((data) => setServices(data.services))
+    },[])
 
     useEffect(() => {
         fetchData()
-    },[])
+    },[fetchData])
  
     console.log(services);
     const navigate = useNavigate();

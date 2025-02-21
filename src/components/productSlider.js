@@ -7,12 +7,10 @@ import AddNew from "./addNew";
 import "../css/addNew.css";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { useState } from "react";
 import Loading from "./Loading";
 import { token } from "./token";
-//import { useEffect } from "react";
-
 
 function ProductSlider() {
 
@@ -23,8 +21,8 @@ function ProductSlider() {
     console.log({
         sliderId: sliderID
     })
-    const fetchData = async () => {
-       await fetch(`https://united-hanger-2025.up.railway.app/api/slider/${sliderID}`, {
+    const fetchData = useCallback( async () => {
+        await fetch(`https://united-hanger-2025.up.railway.app/api/slider/${sliderID}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -32,21 +30,22 @@ function ProductSlider() {
             }
        }).then((response) => response.json())
         .then((data) => setSlider(data.slider))
-    }
+    },[sliderID])
 
     useEffect(() => {
         fetchData()
-    }, []);
-const [EditTitle, setEditTitle] = useState("");
+    }, [fetchData]);
+    const [EditTitle, setEditTitle] = useState("");
     const [EditDescription, setEditDescription] = useState("");
-    const [EditImage, setEditImage] = useState(null); // الصورة المعدلة
+    const [EditImage] = useState(null); 
+
+    
 
     const EditSliderData = async () => {
         const formData = new FormData();
         formData.append("title", EditTitle);
         formData.append("description", EditDescription);
 
-        // إذا كانت هناك صورة معدلة أضفها
         if (EditImage) {
             formData.append("image", EditImage);
         }
@@ -77,13 +76,6 @@ const [EditTitle, setEditTitle] = useState("");
             console.error("Error updating slider:", error);
         }
     };
-
-   /* const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            setEditImage(file);
-        }
-    };*/
 
     const handleDelete = () => {
         Swal.fire({

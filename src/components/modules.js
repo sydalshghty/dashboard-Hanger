@@ -6,24 +6,24 @@ import "../css/products.css";
 import imgEdit from "../images/Group 409.svg";
 import imgDelete from "../images/Group 410.svg";
 import Swal from "sweetalert2";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Loading from "./Loading";
 import { token } from "./token";
-//import Navbar from "./navBar";
+
 
 function Modules() {
 
     const [products, setProducts] = useState([]);
 
-    const getAllProducts = async () => {
+    const getAllProducts = useCallback(async () => {
         await fetch("https://united-hanger-2025.up.railway.app/api/products")
             .then((response) => response.json())
             .then((data) => setProducts(data.products))
-    }
+    },[])
 
     useEffect(() => {
         getAllProducts()
-    }, [])
+    }, [getAllProducts])
     
     console.log(products);
 
@@ -31,10 +31,6 @@ function Modules() {
 
     const handleNavigate = () => {
         navigate("/AddNewProduct")
-    }
-
-    const handleNavigateEdit = () => {
-        navigate("/EditProduct")
     }
 
         const handleDelete = (productID) => {

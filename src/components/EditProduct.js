@@ -9,7 +9,7 @@ import closeSquare from "../images/Close-Square.svg";
 import ProductEdit from "../images/Group 452.svg";
 import { useParams } from "react-router-dom";
 import { token } from "./token";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Loading from "./Loading";
 import "../css/ProductSubmit.css";
 function EditProduct() {
@@ -18,7 +18,7 @@ function EditProduct() {
 
     const { ProductID } = useParams();
  
-    const getProductData = async () => {
+    const getProductData = useCallback(async () => {
         await fetch(`https://united-hanger-2025.up.railway.app/api/products/${ProductID}`, {
             method: "GET",
             headers: {
@@ -27,11 +27,11 @@ function EditProduct() {
             }
         }).then((response) => response.json())
         .then((data) => setProduct(data.product))
-    }
+    },[ProductID])
 
     useEffect(() => {
         getProductData();
-    }, [])
+    }, [getProductData])
     console.log(Product);
     const navigate = useNavigate();
 

@@ -1,7 +1,7 @@
 import imgColor from "../images/Group 429.svg";
 import UserName from "./userName";
 import { useNavigate } from "react-router-dom";
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { ChromePicker } from 'react-color';
 import "../css/color.css";
 import Swal from "sweetalert2";
@@ -18,7 +18,7 @@ function Color() {
 
     const [color, setColor] = useState('#F6F6FB');  
     const [showPicker, setShowPicker] = useState(false); 
-    const [Name, setName] = useState("Name");
+    //const [Name, setName] = useState("Name");
 
             const handleDelete = (id) => {
         Swal.fire({
@@ -37,9 +37,9 @@ function Color() {
         
     }
 
-    const handleName = () => {
+    /*const handleName = () => {
         setName("");
-    }
+    }*/
 
     const handleInputChange = (event) => {
         setColor(event.target.value);
@@ -61,23 +61,22 @@ function Color() {
     const handleNavigate = () => {
         navigate("/Colors")
     }
-    const [code, setCode] = useState("Code");
 
     const [item, setItem] = useState([]);
 
-    const getColor = async () => {
-      await fetch(`https://united-hanger-2025.up.railway.app//api/colors/${ColorID}`, {
+    const getColor = useCallback(async () => {
+        await fetch(`https://united-hanger-2025.up.railway.app//api/colors/${ColorID}`, {
             method: "GET",
             headers: {
                     "Authorization": `Bearer ${token}` 
                 }
         }).then((response) => response.json())
         .then(data => setItem(data.color))
-    }
+    },[ColorID])
 
     useEffect(() => {
         getColor();
-    }, []);
+    }, [getColor]);
 
     console.log(item);
 
@@ -116,10 +115,6 @@ function Color() {
                     <div className="col-name">
                         <p>Name</p>
                         <input
-                            onFocus={handleName}
-                            onBlur={() => {
-                                setName("Name")
-                            }}
                                     onClick={blurtogglePicker}
                                     onChange={(e) => {
                                         setname(e.target.value)
@@ -130,12 +125,7 @@ function Color() {
                         <p>Code</p>
                         <input
                             onClick={blurtogglePicker}
-                            onFocus={() => {
-                            setCode("");
-                        }}
-                            onBlur={() => {
-                                setCode("Code");
-                        }}    type="text" placeholder={item.code} name="Code" />
+                          type="text" placeholder={item.code} name="Code" />
                     </div> 
                 </div>
                 <div className="col-Hex-code">

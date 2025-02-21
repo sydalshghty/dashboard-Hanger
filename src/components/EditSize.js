@@ -1,6 +1,6 @@
 import imgSize from "../images/Group 429.svg";
 import UserName from "./userName";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "../css/EditSize.css";
 import { useNavigate } from "react-router-dom";
@@ -16,8 +16,6 @@ function EditSize() {
     const handleNavigate = () => {
         navigate("/Sizes")
     }
-    const [Value, setValue] = useState("Value");
-    const [Unit, setUnit] = useState("Unit");
 
         const handleDelete = () => {
         Swal.fire({
@@ -38,7 +36,7 @@ function EditSize() {
 
     const [size, setSize] = useState([]);
 
-    const getSizeOnly = () => {
+    const getSizeOnly = useCallback(async () => {
         fetch(`https://united-hanger-2025.up.railway.app//api/sizes/${SizeID}`, {
             method: "GET",
             headers: {
@@ -46,11 +44,11 @@ function EditSize() {
             }
         }).then((response) => response.json())
         .then(data => setSize(data.size));
-    }
+    },[SizeID])
 
     useEffect(() => {
         getSizeOnly();
-    }, []);
+    }, [getSizeOnly]);
 
     console.log(size);
 
@@ -89,12 +87,6 @@ function EditSize() {
                 <div className="col-Value">
                     <p>Value</p>
                     <input
-                        onFocus={() => {
-                            setValue("")
-                        }}
-                        onBlur={() => {
-                            setValue("Value")
-                        }}
                          onChange={(e) => {
                             setValueSize(e.target.value)
                         }}     
@@ -103,12 +95,6 @@ function EditSize() {
                 <div className="col-Unit">
                     <p>Unit</p>
                     <input
-                        onFocus={() => {
-                            setUnit("");
-                        }}
-                        onBlur={() => {
-                            setUnit("Unit");
-                        }}
                         onChange={(e) => {
                             setUnitSize(e.target.value)
                         }}     

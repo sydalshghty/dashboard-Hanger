@@ -2,7 +2,7 @@ import imgMaterial from "../images/Group 429.svg";
 import UserName from "./userName";
 import "../css/EditMaterial.css";
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import { token } from "./token";
@@ -10,8 +10,6 @@ import Loading from "./Loading";
 function EditMaterial() {
     const { MaterialID } = useParams();
     
-    const [namePlaceholder, setNamePlaceholder] = useState("Name");
-
     const navigate = useNavigate();
 
     const handleNavigate = () => {
@@ -37,19 +35,19 @@ function EditMaterial() {
 
     const [Material, setMaterial] = useState([]);
 
-    const getMaterial = async () => {
-       await  fetch(`https://united-hanger-2025.up.railway.app//api/materials/${MaterialID}`, {
+    const getMaterial = useCallback(async () => {
+        await  fetch(`https://united-hanger-2025.up.railway.app//api/materials/${MaterialID}`, {
             method: "GET",
             headers: {
                     "Authorization": `Bearer ${token}` 
                 }
         }).then((response) => response.json())
         .then(data => setMaterial(data.material))
-    }
+    },[MaterialID])
 
     useEffect(() => {
         getMaterial();
-    }, [])
+    }, [getMaterial])
 
     const [newName, setNewName] = useState("");
 
@@ -85,12 +83,6 @@ function EditMaterial() {
                     <div className="col-input-material">
                         <p>Name</p>
                         <input
-                            onFocus={() => {
-                                setNamePlaceholder("")
-                            }}
-                            onBlur={() => {
-                                setNamePlaceholder("Name")
-                            }}
                             onChange={(e) => {
                                 setNewName(e.target.value);
                             }}

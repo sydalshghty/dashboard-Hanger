@@ -3,9 +3,8 @@ import imgIcon from "../images/Group 429.svg";
 import "../css/EditSlider.css";
 import { useNavigate } from "react-router-dom";
 import imgProduct from "../images/61GsnUB4HuL 2 (2).png";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import Swal from "sweetalert2";
-//import { sliderID } from "./sliderID";
 import { token } from "./token";
 import { useEffect } from "react";
 
@@ -38,8 +37,8 @@ function EditSlider() {
         navigate("/Slider");
     }
 
-    const fetchData = async () => {
-      await  fetch(`https://united-hanger-2025.up.railway.app/api/slider/2`, {
+    const fetchData = useCallback(async () => {
+        await  fetch(`https://united-hanger-2025.up.railway.app/api/slider/2`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
@@ -48,11 +47,11 @@ function EditSlider() {
         })
             .then((response) => response.json())
             .then((data) => console.log(data))
-    }
+    },[])
 
     useEffect(() => {
         fetchData();
-    },[])
+    },[fetchData])
 
     return (
         <div className="EditSlider-Departament">

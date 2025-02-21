@@ -8,15 +8,9 @@ import editIcon from "../images/Group 409.svg";
 import { Link, useNavigate } from "react-router-dom";
 import Swal from "sweetalert2";
 import { token } from "./token";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Loading from "./Loading";
 function RowMaterial() {
-    const navigate = useNavigate();
-
-    const handleNavigate = () => {
-        navigate("/material");
-    }
-
     const navigate2 = useNavigate();
 
     const handleNavigate2 = () => {
@@ -52,19 +46,19 @@ function RowMaterial() {
 
     const [materials, setMaterials] = useState([]);
 
-    const getAllMaterials = async () => {
-      await fetch(`https://united-hanger-2025.up.railway.app//api/materials`, {
+    const getAllMaterials = useCallback(async () => {
+        await fetch(`https://united-hanger-2025.up.railway.app//api/materials`, {
             method: "GET",
             headers: {
                     "Authorization": `Bearer ${token}` 
                 }
         }).then((response) => response.json())
         .then(data => setMaterials(data.materials))
-    }
+    },[])
 
     useEffect(() => {
         getAllMaterials();
-    }, [])
+    }, [getAllMaterials])
     
     const backgroundColor = (id) => {
         if ((id % 2) === 0) {

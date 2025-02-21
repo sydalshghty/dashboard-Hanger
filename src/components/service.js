@@ -5,11 +5,10 @@ import "../css/userName.css";
 import { useNavigate } from "react-router-dom";
 import AddNew from "./addNew";
 import "../css/addNew.css";
-//import imgProduct from "../images/61GsnUB4HuL 2 (1).png";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import { token } from "./token";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Loading from "./Loading";
 function Service() {
 
@@ -43,24 +42,20 @@ function Service() {
     const handleNavigateAddNew = () => {
         navigate("/AddNewServices")
     }
-
-    const handleNavigateEditService = () => {
-        navigate("/EditService")
-    }
  
-    const getServiceData = async () => {
-       await  fetch(`https://united-hanger-2025.up.railway.app/api/service/${serviceID}`, {
+    const getServiceData = useCallback(async () => {
+        await  fetch(`https://united-hanger-2025.up.railway.app/api/service/${serviceID}`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`
             }
        }).then((response) => response.json())
         .then(data => setService(data.service))
-    }
+    },[serviceID])
 
     useEffect(() => {
         getServiceData();
-    }, [])
+    }, [getServiceData])
     
     console.log(service);
 

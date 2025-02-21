@@ -2,8 +2,7 @@ import UserName from "./userName";
 import imgIcon from "../images/Group 429.svg";
 import "../css/EditSlider.css";
 import { useNavigate } from "react-router-dom";
-import imgProduct from "../images/61GsnUB4HuL 2 (2).png";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import { useParams } from "react-router-dom";
 import { token } from "./token";
@@ -31,18 +30,13 @@ function EditService() {
         })
         
     }
-
-    const [title, setTitle] = useState("Title");
-
-    const [description, setDescription] = useState("Description . . . ");
-
     const navigate = useNavigate();
 
     const handlNavigate = () => {
         navigate("/Services");
     }
 
-    const getDataService = () => {
+    const getDataService = useCallback(async () => {
         fetch(`https://united-hanger-2025.up.railway.app/api/service/${EditServiceID}`, {
             method: "GET",
             headers: {
@@ -50,11 +44,11 @@ function EditService() {
             }
         }).then((response) => response.json())
         .then(data => setEditService(data.service))
-    }
+    },[EditServiceID])
 
     useEffect(() => {
         getDataService();
-    }, []);
+    }, [getDataService]);
 
     const [TitleService, setTitleService] = useState("");
     const [DescService, setDescService] = useState("");
@@ -93,12 +87,6 @@ function EditService() {
                     <div className="col-title">
                         <p>Title</p>
                         <input
-                            onFocus={() => {
-                                setTitle("")
-                            }}
-                            onBlur={() => {
-                                setTitle("Title")
-                            }}
                             onChange={(e) => {
                                 setTitleService(e.target.value)
                             }}
@@ -107,12 +95,6 @@ function EditService() {
                     <div className="col-description">
                         <p>Description</p>
                         <input
-                            onFocus={() => {
-                                setDescription("")
-                            }}
-                            onBlur={() => {
-                                setDescription("Description . . . ")
-                            }}
                             onChange={(e) => {
                                 setDescService(e.target.value)
                             }}

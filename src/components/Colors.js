@@ -6,7 +6,7 @@ import imgEdit from "../images/Group 409.svg";
 import "../css/colors.css";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { token } from "./token";
 import Loading from "./Loading";
 
@@ -14,20 +14,20 @@ function Colors() {
 
     const [AllColors, setAllColors] = useState([]);
 
-    const getAllColors = async () => {
+    const getAllColors = useCallback(async () => {
         await fetch("https://united-hanger-2025.up.railway.app//api/colors", {
-          method: "GET",
-            headers: {
-                    "Authorization": `Bearer ${token}` 
-                }
-      })
-        .then((response) => response.json())
-        .then((data) => setAllColors(data.colors))
-    }
+            method: "GET",
+              headers: {
+                      "Authorization": `Bearer ${token}` 
+                  }
+        })
+          .then((response) => response.json())
+          .then((data) => setAllColors(data.colors))
+    },[])
 
     useEffect(() => {
         getAllColors()
-    }, [])
+    }, [getAllColors])
     
     console.log(AllColors);
 

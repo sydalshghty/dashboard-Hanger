@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import imgUpload from "../images/Vector (4).svg";
 import { useState } from "react";
 import { token } from "./token";
-//import axios from "axios";
 function AddNewSlider() {
 
     
@@ -20,40 +19,36 @@ function AddNewSlider() {
 
 
     
-  const [sliderTitle, setSliderTitle] = useState(""); // حقل العنوان
-    const [sliderDescription, setSliderDescription] = useState(""); // حقل الوصف
-    const [image, setImage] = useState(null); // حقل الصورة
-
-    const handleNavigateSlider = () => {
-        navigate("/Slider"); // التوجيه إلى صفحة السلايدر
-    };
+  const [sliderTitle, setSliderTitle] = useState(""); 
+    const [sliderDescription, setSliderDescription] = useState(""); 
+    const [image, setImage] = useState(null); 
 
     const handleImageChange = (event) => {
         const file = event.target.files[0]; 
         if (file) {
-            setImage(file); // تخزين الصورة
+            setImage(file); 
         }
     };
 
     const sendDataSlider = async () => {
         const formData = new FormData();
-        formData.append("image", image); // إضافة الصورة
-        formData.append("title", sliderTitle); // إضافة العنوان
-        formData.append("description", sliderDescription); // إضافة الوصف
+        formData.append("image", image); 
+        formData.append("title", sliderTitle); 
+        formData.append("description", sliderDescription); 
 
         try {
             const response = await fetch("https://united-hanger-2025.up.railway.app/api/new_slider", {
                 method: "POST",
                 headers: {
-                    "Authorization": `Bearer ${token}` // التوكن
+                    "Authorization": `Bearer ${token}` 
                 },
-                body: formData // البيانات
+                body: formData 
             });
 
             const data = await response.json();
-            console.log("Response from server:", data); // استجابة السيرفر
+            console.log("Response from server:", data); 
         } catch (error) {
-            console.error("Error sending data:", error); // عرض الأخطاء
+            console.error("Error sending data:", error); 
         }
     };
 

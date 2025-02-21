@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSearch } from "@fortawesome/free-solid-svg-icons";
 import imgEdit from "../images/Group 409.svg";
 import imgDelete from "../images/Group 410.svg";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AddNew from "./addNew";
 import "../css/slider.css";
@@ -19,9 +19,7 @@ function Slider() {
 
     const [sliders, setSliders] = useState([]);
 
-    const fetchData = async () => {
-
-
+    const fetchData = useCallback(async () => {
         await fetch("https://united-hanger-2025.up.railway.app/api/sliders", {
             method: "GET",
             headers: {
@@ -30,11 +28,11 @@ function Slider() {
         })
             .then((response) => response.json())
             .then((data) => setSliders(data.sliders))
-    }
+    },[])
 
     useEffect(() => {
         fetchData();
-    }, [])
+    }, [fetchData])
     
     console.log(sliders);
 

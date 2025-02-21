@@ -7,7 +7,7 @@ import "../css/sizes.css";
 import Swal from "sweetalert2";
 import { Link, useNavigate } from "react-router-dom";
 import { token } from "./token";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Loading from "./Loading";
 
 function Sizes() {
@@ -17,11 +17,6 @@ function Sizes() {
     const handleNavigate = () => {
         navigate("/AddNewSize");
     }
-
-    const handleNavigateSize = () => {
-        navigate("/EditSize");
-    }
-
         const handleDelete = (id) => {
 
         Swal.fire({
@@ -53,19 +48,19 @@ function Sizes() {
 
     const [sizes, setSizes] = useState([]);
 
-    const getAllSizes = () => {
-        fetch(`https://united-hanger-2025.up.railway.app//api/sizes`, {
+    const getAllSizes = useCallback(async () => {
+      await  fetch(`https://united-hanger-2025.up.railway.app//api/sizes`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`
             }
         }).then((response) => response.json())
         .then(data => setSizes(data.sizes));
-    }
+    },[])
 
     useEffect(() => {
         getAllSizes();
-    }, [])
+    }, [getAllSizes])
     
     console.log(sizes);
 
